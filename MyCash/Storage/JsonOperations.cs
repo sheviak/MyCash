@@ -8,14 +8,26 @@ namespace MyCash.Storage
     {
         public ObservableCollection<MyOrders> DeserializingCollectionsObjects(string fileName)
         {
-            string json = File.ReadAllText(fileName);
-            return JsonConvert.DeserializeObject<ObservableCollection<MyOrders>>(json);
+            string json = "";
+            ObservableCollection<MyOrders> temp = new ObservableCollection<MyOrders>();
+            if (File.Exists(fileName))
+            {
+                json = File.ReadAllText(fileName);
+                temp = JsonConvert.DeserializeObject<ObservableCollection<MyOrders>>(json);
+            }
+            return temp;
         }
 
         public ObservableCollection<string> DeserializingCollectionsSubjects(string fileName)
         {
-            string json = File.ReadAllText(fileName);
-            return JsonConvert.DeserializeObject<ObservableCollection<string>>(json);
+            string json = "";
+            ObservableCollection<string> temp = new ObservableCollection<string>();
+            if (File.Exists(fileName))
+            {
+                json = File.ReadAllText(fileName);
+                temp = JsonConvert.DeserializeObject<ObservableCollection<string>>(json);
+            }
+            return temp;
         }
 
         public void SerializingCollectionsObjects(string fileName, ObservableCollection<MyOrders> list)

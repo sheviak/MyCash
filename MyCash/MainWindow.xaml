@@ -182,6 +182,9 @@
                     <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Left" Margin="8 0 0 0">
                         <materialDesign:PackIcon Kind="ShowChart" Height="25" Width="25" Foreground="LightSlateGray" />
                     </Button>
+                    <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Left" Margin="8 0 0 0" Command="{Binding Refresh}">
+                        <materialDesign:PackIcon Kind="Refresh" Height="25" Width="25" Foreground="LightSlateGray" />
+                    </Button>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 8 0">

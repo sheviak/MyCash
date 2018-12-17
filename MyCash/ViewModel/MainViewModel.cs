@@ -147,8 +147,6 @@ namespace MyCash.ViewModel
 
             Lessons = jsonOperations.DeserializingCollectionsSubjects("Subjects.json");
 
-            //MyColl = new ObservableCollection<MyOrders>(MyOrdersCollections.OrderBy(x => x.Status));
-
             // занесение данных
             SetNumbers(LabWork, 15);
             SetNumbers(Variant, 25);
@@ -183,21 +181,30 @@ namespace MyCash.ViewModel
 
         public ICommand Complete => new RelayCommand(() =>
         {
-            if (MyOrdersComplete.Count == 0)
-                MyOrdersComplete = jsonOperations.DeserializingCollectionsObjects("MyOrdersComplete.json");
+            if (SelectedItem != null)
+            {
+                if (MyOrdersComplete.Count == 0)
+                    MyOrdersComplete = jsonOperations.DeserializingCollectionsObjects("MyOrdersComplete.json");
 
-            SelectedItem.Status = true;
-            MyOrdersComplete.Add(SelectedItem);
-            MyOrdersCollections.Remove(SelectedItem);
-            Changes = true;
-            ChangesComplete = true;
+                SelectedItem.Status = true;
+                MyOrdersComplete.Add(SelectedItem);
+                MyOrdersCollections.Remove(SelectedItem);
+                Changes = true;
+                ChangesComplete = true;
+            }
         });
 
         public ICommand Delete => new RelayCommand(() =>
         {
-            MyColl.Remove(SelectedItem);
-            GetPay();
-            Changes = true;
+            if (SelectedItem != null)
+            {
+                MyColl.Remove(SelectedItem);
+                GetPay();
+                if (MyColl == MyOrdersCollections)
+                    Changes = true;
+                else
+                    ChangesComplete = true;
+            }
         });
 
         public ICommand OpenPopupToAdd => new RelayCommand(() =>
@@ -208,24 +215,37 @@ namespace MyCash.ViewModel
         });
 
         public ICommand CreateOrChangeElement => new RelayCommand(() => AddOrEditElement());
+
         public ICommand rrr => new RelayCommand(() => Changes = true);
 
         public void AddOrEditElement()
         {
             if (AddOrEdit == true)
             {
-                MyOrdersCollections.Add(new MyOrders(
-                    myOrders.FIO, Lessons[IndexSubject], LabWork[IndexLrSubject], Variant[IndexVariant],
-                    myOrders.Cost, myOrders.Report, false, Date, myOrders.Description
-                 ));
+                if (ChechData())
+                {
+                    MyOrdersCollections.Add(new MyOrders(
+                        myOrders.FIO, Lessons[IndexSubject], LabWork[IndexLrSubject], Variant[IndexVariant],
+                        myOrders.Cost, myOrders.Report, false, Date, myOrders.Description
+                     ));
+                    RefreshMyOrdersCollections();
+                }
+                else
+                {
+                    MessageBox.Show("Заполните все поля");
+                    return;
+                }
             }
             else
             {
-                var t = MyColl.IndexOf(SelectedItem);
-                MyColl[t] = new MyOrders(
-                    myOrders.FIO, Lessons[IndexSubject], LabWork[IndexLrSubject], Variant[IndexVariant],
-                    myOrders.Cost, myOrders.Report, SelectedItem.Status, Date, myOrders.Description
-                 );
+                if (ChechData())
+                {
+                    var t = MyColl.IndexOf(SelectedItem);
+                    MyColl[t] = new MyOrders(
+                        myOrders.FIO, Lessons[IndexSubject], LabWork[IndexLrSubject], Variant[IndexVariant],
+                        myOrders.Cost, myOrders.Report, SelectedItem.Status, Date, myOrders.Description
+                     );
+                } else MessageBox.Show("Заполните все поля");
             }
 
             OpenDialog = false;
@@ -235,19 +255,33 @@ namespace MyCash.ViewModel
         }
 
         public ICommand Edit => new RelayCommand(() => {
-            myOrders.FIO = SelectedItem.FIO;
-            IndexSubject = Lessons.IndexOf(SelectedItem.Subject);
-            IndexLrSubject = LabWork.IndexOf(SelectedItem.LrSubject);
-            IndexVariant = Variant.IndexOf(SelectedItem.Variant);
-            myOrders.Cost = SelectedItem.Cost;
-            myOrders.Report = SelectedItem.Report;
-            myOrders.Description = SelectedItem.Description;
-            Date = SelectedItem.Date;
+            if (SelectedItem != null)
+            {
+                myOrders.FIO = SelectedItem.FIO;
+                IndexSubject = Lessons.IndexOf(SelectedItem.Subject);
+                IndexLrSubject = LabWork.IndexOf(SelectedItem.LrSubject);
+                IndexVariant = Variant.IndexOf(SelectedItem.Variant);
+                myOrders.Cost = SelectedItem.Cost;
+                myOrders.Report = SelectedItem.Report;
+                myOrders.Description = SelectedItem.Description;
+                Date = SelectedItem.Date;
 
-            BtnText = "Изменить";
-            AddOrEdit = false;
-            OpenDialog = true;
+                BtnText = "Изменить";
+                AddOrEdit = false;
+                OpenDialog = true;
+            }
         });
+
+        public ICommand Refresh => new RelayCommand(() => RefreshMyOrdersCollections());
+
+        private void RefreshMyOrdersCollections()
+        {
+            if (MyColl == MyOrdersCollections)
+            {
+                MyOrdersCollections = new ObservableCollection<MyOrders>(MyOrdersCollections.OrderBy(x => x.Status));
+                MyColl = MyOrdersCollections;
+            }
+        }
 
         private void SetNumbers(List<int> coll, int size)
         {
@@ -258,6 +292,14 @@ namespace MyCash.ViewModel
         private void GetPay()
         {
             Cash = MyColl.Sum(m => m.Cost);
+        }
+
+        private bool ChechData()
+        {
+            if (myOrders.FIO != "" && IndexSubject != -1 && IndexLrSubject != -1 && IndexVariant != -1 && myOrders.Cost != 0)
+                return true;
+            else
+                return false;
         }
 
         private void ResetProperty()
