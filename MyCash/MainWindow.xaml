@@ -7,22 +7,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyCash"
         mc:Ignorable="d"
+        BorderThickness="0.5"
+        WindowStyle="None"
+        Icon="Resources/icons.png"
+        ResizeMode="CanResizeWithGrip"
+        AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource MaterialDesignPaper}"
         xmlns:data="clr-namespace:MyCash.Storage"
-        Title="MainWindow" Height="500" Width="760">
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"  
+        xmlns:viewmodel="clr-namespace:MyCash.ViewModel"
+        Title="MainWindow" Height="500" Width="900">
 
-    <x:Code>
-        <![CDATA[            
-        private void DragMove(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-    ]]>
-    </x:Code>
+    <Window.DataContext>
+        <viewmodel:MainViewModel />
+    </Window.DataContext>
 
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.7" FillBehavior="HoldEnd" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    
     <materialDesign:DialogHost Style="{StaticResource MaterialDesignEmbeddedDialogHost}" Background="#17212B"
-        HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsOpen="{Binding OpenDialog}" x:Name="DialogHost">
         <materialDesign:DialogHost.DialogContent>
             <Border Margin="-10" Background="#17212B">
                 <Grid Width="300" Margin="20" Grid.IsSharedSizeScope="True" Background="#17212B">
@@ -31,6 +42,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="40" /> 
                         <RowDefinition Height="40" />
                         <RowDefinition Height="40" />
                         <RowDefinition Height="40" />
@@ -38,36 +50,41 @@
                         <RowDefinition Height="40" />
                         <RowDefinition Height="40" />
                         <RowDefinition Height="40" />
+                        <RowDefinition Height="20" />
                         <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="ФИО" VerticalAlignment="Bottom" Style="{StaticResource BaseBlock}" />
-                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding FIO}" Style="{StaticResource BaseBox}" />
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding myOrders.FIO}" Style="{StaticResource BaseBox}" />
 
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Предмет" Style="{StaticResource BaseBlock}" />
-                    <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" ItemsSource="{Binding tt}" SelectedIndex="{Binding indexSubject}" Style="{StaticResource BaseComboBox}" />
+                    <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" ItemsSource="{Binding Lessons}" SelectedIndex="{Binding IndexSubject, Mode=TwoWay}" Style="{StaticResource BaseComboBox}" />
 
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="Лаб. раб." Style="{StaticResource BaseBlock}" />
-                    <ComboBox Grid.Column="1" Grid.Row="2" IsEditable="True" ItemsSource="{Binding lr}" SelectedIndex="{Binding indexLrSubject}" Style="{StaticResource BaseComboBox}" />
+                    <ComboBox Grid.Column="1" Grid.Row="2" IsEditable="True" ItemsSource="{Binding LabWork}" SelectedIndex="{Binding IndexLrSubject}" Style="{StaticResource BaseComboBox}" />
 
                     <TextBlock Grid.Column="0" Grid.Row="3" Text="Вариант" Style="{StaticResource BaseBlock}" />
-                    <ComboBox Grid.Column="1" Grid.Row="3" IsEditable="True" ItemsSource="{Binding vv}" SelectedIndex="{Binding indexVariant}" Style="{StaticResource BaseComboBox}" />
+                    <ComboBox Grid.Column="1" Grid.Row="3" IsEditable="True" ItemsSource="{Binding Variant}" SelectedIndex="{Binding IndexVariant}" Style="{StaticResource BaseComboBox}" />
 
                     <TextBlock Grid.Column="0" Grid.Row="4" Text="Отчёт" Style="{StaticResource BaseBlock}" />
-                    <ToggleButton Grid.Column="1" Grid.Row="4" IsChecked="{Binding Report}" Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                    <ToggleButton Grid.Column="1" Grid.Row="4" IsChecked="{Binding myOrders.Report}" Style="{StaticResource MaterialDesignSwitchToggleButton}"
                               VerticalAlignment="Bottom" HorizontalAlignment="Left" />
 
                     <TextBlock Grid.Column="0" Grid.Row="5" Text="Стоимость" Style="{StaticResource BaseBlock}" />
-                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Cost}" Style="{StaticResource BaseBox}" />
+                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding myOrders.Cost}" Style="{StaticResource BaseBox}" />
 
                     <TextBlock Grid.Column="0" Grid.Row="6" Text="Дата" Style="{StaticResource BaseBlock}" />
-                    <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding Source={x:Static sys:DateTime.Today}, StringFormat='{}{0:d/M/yyyy}'}" Style="{StaticResource BaseBlock}" />
+                    <!--<TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding Source={x:Static sys:DateTime.Today}, StringFormat='{}{0:d/M/yyyy}'}" Style="{StaticResource BaseBlock}" />-->
+                    <DatePicker Grid.Column="1" Grid.Row="6" SelectedDate="{Binding Date}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                                FontSize="16" SelectedDateFormat="Short" />
 
-                    <StackPanel Grid.Column="1" Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Grid.Column="0" Grid.Row="7" Text="Описание" Style="{StaticResource BaseBlock}" />
+                    <TextBox Grid.Column="1" Grid.Row="7" Style="{StaticResource BaseBox}" Text="{Binding myOrders.Description}"/>
+
+                    <StackPanel Grid.Column="1" Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Style="{StaticResource MaterialDesignFlatButton}" Foreground="White" Command="materialDesign:DialogHost.CloseDialogCommand">Отменить</Button>
-                        <Button Style="{StaticResource MaterialDesignFlatButton}" Foreground="White" Command="{Binding AddNew}" Margin="10 0 0 0">Добавить</Button>
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" Foreground="White" Command="{Binding CreateOrChangeElement}" Content="{Binding BtnText}"  Margin="10 0 0 0" />
                     </StackPanel>
-
                 </Grid>
             </Border>
         </materialDesign:DialogHost.DialogContent>
@@ -77,49 +94,38 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
-                <!--<ListBox ItemsSource="{Binding myOrders}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding FIO}"></TextBlock>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>-->
-                <!--<DataGrid Grid.Row="0"
-            ItemsSource="{Binding myOrders}"
-            CanUserSortColumns="True"
-            CanUserAddRows="False" />-->
             
             <!-- ОбЪеденение для перетаскивания -->
-            <Grid Grid.Row="0" Background="#17212B" MouseLeftButtonDown="DragMove" />
+            <Grid Grid.Row="0" Background="#17212B" MouseLeftButtonDown="Grid_MouseLeftButtonDown" />
             
             <StackPanel  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" IsChecked="True" Foreground="LightGray" Content="НЕ ВЫПОЛНЕННЫЕ" />
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" IsChecked="False" Foreground="LightGray" Content="ВЫПОЛНЕННЫЕ" />
-            </StackPanel>
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" IsChecked="True" Foreground="LightGray" Content="НЕ ОПЛАЧЕННЫЕ" Command="{Binding SetCollection}" />
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" x:Name="PaymentColl" IsChecked="False" Foreground="LightGray" Content="ОПЛАЧЕННЫЕ" Command="{Binding SetCompleteCollection}" />
+            </StackPanel> 
 
             <StackPanel  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 8 0">
                     <materialDesign:PackIcon Kind="WindowMinimize" Height="25" Width="25" Foreground="LightSlateGray" />
                 </Button>
-                <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 8 0">
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 8 0" Command="{Binding CloseProgram, Mode=OneWay}">
                     <materialDesign:PackIcon Kind="WindowClose" Height="25" Width="25" Foreground="LightSlateGray" />
                 </Button>
             </StackPanel>
-            
-            <ListView ItemsSource="{Binding myOrders}" Grid.Row="1" HorizontalAlignment="Stretch">
+
+            <ListView ItemsSource="{Binding MyColl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" HorizontalAlignment="Stretch" SelectedItem="{Binding SelectedItem}">
                 <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem  Header="Редактировать">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon Kind="Pencil" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="Выполнить">
+                    <ContextMenu Background="#17212B">
+                        <MenuItem Header="Олачено" Command="{Binding Complete}" IsEnabled="{Binding EnabledItem}">
                             <MenuItem.Icon>
                                 <materialDesign:PackIcon Kind="Check" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Удалить">
+                        <MenuItem Header="Редактировать" Command="{Binding Edit}" IsEnabled="{Binding EnabledItem}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="Pencil" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Удалить" Command="{Binding Delete}">
                             <MenuItem.Icon>
                                 <materialDesign:PackIcon Kind="DeleteEmpty" />
                             </MenuItem.Icon>
@@ -141,7 +147,7 @@
                             </GridViewColumn.HeaderTemplate>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding Report}" />
+                                    <CheckBox IsChecked="{Binding Report}" IsEnabled="False" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -157,18 +163,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn>
-                            <GridViewColumn.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="Оплата" />
-                                </DataTemplate>
-                            </GridViewColumn.HeaderTemplate>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding Status}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Date, StringFormat = {}{0:dd.MM.yyyy}}" Header="Дата добавления" />
                         <GridViewColumn DisplayMemberBinding="{Binding Description}" Header="Описание" />
                     </GridView>
                 </ListView.View>
@@ -189,10 +184,24 @@
                     </Button>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 9 0">
-                    <materialDesign:PackIcon Kind="CurrencyUsd" VerticalAlignment="Center" Height="25" Width="25" Foreground="LightSlateGray"/>
-                    <TextBlock Text="+1500" Foreground="LightSlateGray" FontSize="22" VerticalAlignment="Center" FontWeight="Regular" />
-                    <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="10 0 0 0" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">Добавить</Button>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 8 0">
+
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CurrencyUsd" VerticalAlignment="Center" Height="25" Width="25" Foreground="LightSlateGray" />
+                        <TextBlock Text="{Binding Cash}" FontSize="22" VerticalAlignment="Center" FontWeight="Regular" Foreground="LightSlateGray" />
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Hidden" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=PaymentColl, Path=IsChecked}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                    </StackPanel>
+                    
+                    <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="10 0 0 0" Command="{Binding OpenPopupToAdd}">Добавить</Button>
                 </StackPanel>
             </Grid>
         </Grid>

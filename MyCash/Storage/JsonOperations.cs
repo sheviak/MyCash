@@ -1,20 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
 using Newtonsoft.Json;
 
 namespace MyCash.Storage
 {
-    public class JsonOperations : IJsonOperations
+    public class JsonOperations : IJsonObjects, IJsonSubjects
     {
-        public ObservableCollection<MyOrders> DeserializingCollections(string fileName)
+        public ObservableCollection<MyOrders> DeserializingCollectionsObjects(string fileName)
         {
             string json = File.ReadAllText(fileName);
-            var arr = JsonConvert.DeserializeObject<ObservableCollection<MyOrders>>(json);
-            return arr;
+            return JsonConvert.DeserializeObject<ObservableCollection<MyOrders>>(json);
         }
 
-        public void SerializingCollections(string fileName, ObservableCollection<MyOrders> list)
+        public ObservableCollection<string> DeserializingCollectionsSubjects(string fileName)
+        {
+            string json = File.ReadAllText(fileName);
+            return JsonConvert.DeserializeObject<ObservableCollection<string>>(json);
+        }
+
+        public void SerializingCollectionsObjects(string fileName, ObservableCollection<MyOrders> list)
+        {
+            JsonSerializer serializer = new JsonSerializer();
+            using (StreamWriter sw = new StreamWriter(fileName))
+            {
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    serializer.Serialize(writer, list);
+                }
+            }
+        }
+
+        public void SerializingCollectionsSubjects(string fileName, ObservableCollection<string> list)
         {
             JsonSerializer serializer = new JsonSerializer();
             using (StreamWriter sw = new StreamWriter(fileName))
