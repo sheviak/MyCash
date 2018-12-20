@@ -9,14 +9,14 @@
         mc:Ignorable="d"
         BorderThickness="0.5"
         WindowStyle="None"
-        Icon="Resources/icons.png"
+        Icon="Resources/icon.ico"
         ResizeMode="CanResizeWithGrip"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         xmlns:data="clr-namespace:MyCash.Storage"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"  
         xmlns:viewmodel="clr-namespace:MyCash.ViewModel"
-        Title="MainWindow" Height="500" Width="900">
+        Title="My cash" Height="500" Width="900">
 
     <Window.DataContext>
         <viewmodel:MainViewModel />
@@ -31,7 +31,7 @@
             </BeginStoryboard>
         </EventTrigger>
     </Window.Triggers>
-    
+
     <materialDesign:DialogHost Style="{StaticResource MaterialDesignEmbeddedDialogHost}" Background="#17212B"
         HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsOpen="{Binding OpenDialog}" x:Name="DialogHost">
         <materialDesign:DialogHost.DialogContent>
@@ -104,7 +104,7 @@
             </StackPanel> 
 
             <StackPanel  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 8 0">
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 8 0" Command="{Binding MinimizedProgram}">
                     <materialDesign:PackIcon Kind="WindowMinimize" Height="25" Width="25" Foreground="LightSlateGray" />
                 </Button>
                 <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 8 0" Command="{Binding CloseProgram, Mode=OneWay}">
@@ -133,7 +133,7 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.View>
-                    <GridView>
+                <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding FIO}" Header="ФИО" />
                         <GridViewColumn DisplayMemberBinding="{Binding Subject}" Header="Предмет" />
                         <GridViewColumn DisplayMemberBinding="{Binding LrSubject}" Header="Лаб. раб." />
@@ -164,7 +164,19 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Date, StringFormat = {}{0:dd.MM.yyyy}}" Header="Дата добавления" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Description}" Header="Описание" />
+                        <!--<GridViewColumn DisplayMemberBinding="{Binding Description}" Header="Описание" />-->
+                        <GridViewColumn Width="170">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="Описание" />
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Description}" TextWrapping="WrapWithOverflow" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

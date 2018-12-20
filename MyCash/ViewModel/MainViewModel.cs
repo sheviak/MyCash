@@ -15,7 +15,7 @@ namespace MyCash.ViewModel
         private JsonOperations jsonOperations = new JsonOperations();
 
         private ObservableCollection<MyOrders> MyOrdersCollections { get; set; } = new ObservableCollection<MyOrders>();
-        private ObservableCollection<MyOrders> MyOrdersComplete { get; set; } = new ObservableCollection<MyOrders>();
+        private ObservableCollection<MyOrders> MyOrdersComplete { get; set; }
         public ObservableCollection<string> Lessons { get; set; } = new ObservableCollection<string>();
         public List<int> Variant { get; set; } = new List<int>();
         public List<int> LabWork { get; set; } = new List<int>();
@@ -160,8 +160,11 @@ namespace MyCash.ViewModel
 
         public ICommand SetCompleteCollection => new RelayCommand(() =>
         {
-            if (MyOrdersComplete.Count == 0)
+            if (MyOrdersComplete == null)
+            {
+                MyOrdersComplete = new ObservableCollection<MyOrders>();
                 MyColl = MyOrdersComplete = jsonOperations.DeserializingCollectionsObjects("MyOrdersComplete.json");
+            } 
             else
                 MyColl = MyOrdersComplete;
 
@@ -177,6 +180,11 @@ namespace MyCash.ViewModel
             if(ChangesComplete)
                 jsonOperations.SerializingCollectionsObjects("MyOrdersComplete.json", MyOrdersComplete);
             Environment.Exit(0);
+        });
+
+        public ICommand MinimizedProgram => new RelayCommand(() => {
+            var app = Application.Current.Windows[0];
+            app.WindowState = WindowState.Minimized;
         });
 
         public ICommand Complete => new RelayCommand(() =>
@@ -215,8 +223,6 @@ namespace MyCash.ViewModel
         });
 
         public ICommand CreateOrChangeElement => new RelayCommand(() => AddOrEditElement());
-
-        public ICommand rrr => new RelayCommand(() => Changes = true);
 
         public void AddOrEditElement()
         {
