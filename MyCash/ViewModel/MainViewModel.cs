@@ -1,4 +1,4 @@
-using GalaSoft.MvvmLight.Command;
+Ôªøusing GalaSoft.MvvmLight.Command;
 using MyCash.Storage;
 using System;
 using System.Collections.Generic;
@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace MyCash.ViewModel
 {
@@ -31,7 +33,7 @@ namespace MyCash.ViewModel
             }
         }
 
-        // Á‡Í˚ÚËÂ Ë ÓÚÍ˚ÚËÂ ÓÍÌ‡ popup
+        // –æ—Ç–∫—Ä—ã—Ç–∏–µ –∏ –∑–∞–∫—Ä—ã—Ç–∏–µ –æ–∫–Ω–∞ popup (–¥–æ–±–∞–≤–ª–µ–Ω–∏—è –∏ —Ä–µ–¥–∞–∫—Ç–∏—Ä–≤–æ–∞–Ω–∏—è)
         private bool _OpenDialog;
         public bool OpenDialog
         {
@@ -43,7 +45,7 @@ namespace MyCash.ViewModel
             }
         }
 
-        // Ò‚ÓÈÒÚ‚Ó ı‡ÌÂÌËˇ Á‡‡·ÓÚ‡ÌÌ˚ı ‰ÂÌÂ„
+        // –ø–æ–¥—Å—á–µ—Ç –∑–∞—Ä–∞–±–æ—Ç–∞–Ω–Ω—ã—Ö –¥–µ–Ω–µ–≥
         private int _Cash;
         public int Cash
         {
@@ -51,11 +53,11 @@ namespace MyCash.ViewModel
             set
             {
                 _Cash = value;
-                OnPropertyChanged("Cash");
+                OnPropertyChanged();
             }
         }
 
-        // Ò‚ÓÈÒÚ‚‡ ‰Îˇ ÒÓÁ‰‡ÌËˇ ÌÓ‚Ó„Ó Ó·¸ÂÍÚ‡
+        // –∏–Ω–¥–µ–∫—Å—ã –≤—ã–±–æ—Ä–∞ –ø—Ä–µ–¥–º–µ—Ç–∞, –≤–∞—Ä–∏–∞–Ω—Ç–∞ –∏ –ª–∞–±—ã
         private int _IndexSubject = -1;
         public int IndexSubject
         {
@@ -100,7 +102,7 @@ namespace MyCash.ViewModel
             }
         }
 
-        // ‰Îˇ ÍÓÌÚÂÍÒÚÌÓ„Ó ÏÂÌ˛ (ŒÔÎ‡˜˜ÂÌÓ), ‚ÓÁÏÓÊÌÓÒÚ¸ ÓÚÏÂ˜‡Ú¸ ÚÓÎ¸ÍÓ Õ≈ ÓÔÎ‡˜ÂÌÌ˚Â
+        // √§√´√ø √™√Æ√≠√≤√•√™√±√≤√≠√Æ√£√Æ √¨√•√≠√æ (√é√Ø√´√†√∑√∑√•√≠√Æ), √¢√Æ√ß√¨√Æ√¶√≠√Æ√±√≤√º √Æ√≤√¨√•√∑√†√≤√º √≤√Æ√´√º√™√Æ √ç√Ö √Æ√Ø√´√†√∑√•√≠√≠√ª√•
         private bool _EnabledItem = true;
         public bool EnabledItem
         {
@@ -134,7 +136,7 @@ namespace MyCash.ViewModel
             }
         }
 
-        // ·˚ÎË ÎË ÔÓËÁ‚Â‰ÂÌ˚ ËÁÏÂÌÂÌËˇ
+        // √°√ª√´√® √´√® √Ø√∞√Æ√®√ß√¢√•√§√•√≠√ª √®√ß√¨√•√≠√•√≠√®√ø
         private bool Changes { get; set; }
 
         private bool ChangesComplete { get; set; } = false;
@@ -147,7 +149,7 @@ namespace MyCash.ViewModel
 
             Lessons = jsonOperations.DeserializingCollectionsSubjects("Subjects.json");
 
-            // Á‡ÌÂÒÂÌËÂ ‰‡ÌÌ˚ı
+            // —É—Å—Ç–∞–Ω–æ–≤–ª–µ–Ω–∏–µ –∫–æ–ª-–≤–∞ –ª–∞–± –∏ –≤–∞—Ä–∏–∞–Ω—Ç–æ–≤
             SetNumbers(LabWork, 15);
             SetNumbers(Variant, 25);
         }
@@ -217,7 +219,7 @@ namespace MyCash.ViewModel
 
         public ICommand OpenPopupToAdd => new RelayCommand(() =>
         {
-            BtnText = "ƒÓ·‡‚ËÚ¸";
+            BtnText = "–î–æ–±–∞–≤–∏—Ç—å";
             AddOrEdit = true;
             OpenDialog = true;
         });
@@ -238,7 +240,7 @@ namespace MyCash.ViewModel
                 }
                 else
                 {
-                    MessageBox.Show("«‡ÔÓÎÌËÚÂ ‚ÒÂ ÔÓÎˇ");
+                    MessageBox.Show("–ó–∞–ø–æ–ª–Ω–∏—Ç–µ –≤—Å–µ –ø–æ–ª—è!");
                     return;
                 }
             }
@@ -251,7 +253,7 @@ namespace MyCash.ViewModel
                         myOrders.FIO, Lessons[IndexSubject], LabWork[IndexLrSubject], Variant[IndexVariant],
                         myOrders.Cost, myOrders.Report, SelectedItem.Status, Date, myOrders.Description
                      );
-                } else MessageBox.Show("«‡ÔÓÎÌËÚÂ ‚ÒÂ ÔÓÎˇ");
+                } else MessageBox.Show("–ó–∞–ø–æ–ª–Ω–∏—Ç–µ –≤—Å–µ –ø–æ–ª—è!");
             }
 
             OpenDialog = false;
@@ -272,7 +274,7 @@ namespace MyCash.ViewModel
                 myOrders.Description = SelectedItem.Description;
                 Date = SelectedItem.Date;
 
-                BtnText = "»ÁÏÂÌËÚ¸";
+                BtnText = "–ò–∑–º–µ–Ω–∏—Ç—å";
                 AddOrEdit = false;
                 OpenDialog = true;
             }
@@ -319,6 +321,57 @@ namespace MyCash.ViewModel
             myOrders.Description = null;
             Date = DateTime.Now;
         }
+
+
+        public ICommand ShowGraphics => new RelayCommand(() =>
+        {
+            if (MyColl.Count == 0)
+            {
+                return;
+            }
+
+            var obj = MyColl
+                .GroupBy(p => p.Date.ToString("MMMM"), p => p.Cost)
+                .Select(x => new { Mounth = x.Key, Sum = x.Sum()} ).ToList();
+
+            // –¥–æ–±–∞–≤–ª–µ–Ω–∏–µ –æ–±—å–µ–∫—É—Ç–æ–≤ –≤ —Å–µ—Ä–∏—é
+            foreach (var item in obj)
+            {
+                MediatorClass.LabelsForColumn.Add(item.Mounth);
+                MediatorClass.ColumnSeries[0].Values.Add(item.Sum);
+            }
+
+            obj.Clear(); // –£–¥–∞–ª—è–µ—Ç –∏–∑ –∫–æ–ª–ª–µ–∫—Ü–∏–∏ List<T> –≤—Å–µ —ç–ª–µ–º–µ–Ω—Ç—ã.
+            obj.TrimExcess(); // –ó–∞–¥–∞–µ—Ç –µ–º–∫–æ—Å—Ç—å, —Ä–∞–≤–Ω—É—é —Ñ–∞–∫—Ç–∏—á–µ—Å–∫–æ–º—É —á–∏—Å–ª—É —ç–ª–µ–º–µ–Ω—Ç–æ–≤ –≤ —Å–ø–∏—Å–∫–µ
+
+            //–≤—ã–±–æ—Ä –º–µ—Å—è—Ü–æ–≤ –±–µ–∑ –ø–æ–≤—Ç–æ—Ä–µ–Ω–∏–π
+            //var ttt = MyColl.Select(x => x.Date.ToString("MMMM")).Distinct();
+
+            var pieCollections = MyColl
+                .GroupBy(p => p.Subject)
+                .Select(x => new { Subjext = x.Key, Count = x.Count() }).ToList();
+
+            foreach (var item in pieCollections)
+            {
+                MediatorClass.PieSeries.Add(
+                    new PieSeries
+                    {
+                        Title = item.Subjext,
+                        Values = new ChartValues<int> { item.Count },
+                        DataLabels = true,
+                        //–ø—Ä–æ—Ü–µ–Ω—Ç–Ω–æ–µ –æ—Ç–æ–±—Ä–∞–∂–µ–Ω–∏–µ –Ω–∞ –≥—Ä–∞—Ñ–∏–∫–µ
+                        LabelPoint = chartPoint => string.Format("{0} —à—Ç.\n({1:P})", chartPoint.Y, chartPoint.Participation),
+                        FontSize = 12
+                    }
+                );
+            }
+
+            pieCollections.Clear();
+            pieCollections.TrimExcess();
+
+            GraphWindow graph = new GraphWindow();
+            graph.ShowDialog();
+        });
 
     }
 }   

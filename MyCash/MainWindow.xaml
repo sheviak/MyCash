@@ -9,7 +9,6 @@
         mc:Ignorable="d"
         BorderThickness="0.5"
         WindowStyle="None"
-        Icon="Resources/icon.ico"
         ResizeMode="CanResizeWithGrip"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
@@ -89,21 +88,21 @@
             </Border>
         </materialDesign:DialogHost.DialogContent>
         <Grid Background="#17212B">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
             
             <!-- ОбЪеденение для перетаскивания -->
             <Grid Grid.Row="0" Background="#17212B" MouseLeftButtonDown="Grid_MouseLeftButtonDown" />
             
-            <StackPanel  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" IsChecked="True" Foreground="LightGray" Content="НЕ ОПЛАЧЕННЫЕ" Command="{Binding SetCollection}" />
                 <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" x:Name="PaymentColl" IsChecked="False" Foreground="LightGray" Content="ОПЛАЧЕННЫЕ" Command="{Binding SetCompleteCollection}" />
             </StackPanel> 
 
-            <StackPanel  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="0 0 8 0" Command="{Binding MinimizedProgram}">
                     <materialDesign:PackIcon Kind="WindowMinimize" Height="25" Width="25" Foreground="LightSlateGray" />
                 </Button>
@@ -191,7 +190,7 @@
                     <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Left" Margin="8 0 0 0">
                         <materialDesign:PackIcon Kind="SettingsOutline" Height="25" Width="25" Foreground="LightSlateGray" />
                     </Button>
-                    <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Left" Margin="8 0 0 0">
+                    <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Left" Margin="8 0 0 0" Command="{Binding ShowGraphics}">
                         <materialDesign:PackIcon Kind="ShowChart" Height="25" Width="25" Foreground="LightSlateGray" />
                     </Button>
                     <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Left" Margin="8 0 0 0" Command="{Binding Refresh}">
