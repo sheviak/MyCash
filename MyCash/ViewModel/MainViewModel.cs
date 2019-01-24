@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using LiveCharts;
 using LiveCharts.Wpf;
+using MyCash.Windows;
 
 namespace MyCash.ViewModel
 {
@@ -18,7 +19,7 @@ namespace MyCash.ViewModel
 
         private ObservableCollection<MyOrders> MyOrdersCollections { get; set; } = new ObservableCollection<MyOrders>();
         private ObservableCollection<MyOrders> MyOrdersComplete { get; set; }
-        public ObservableCollection<string> Lessons { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> Lessons { get; set; }
         public List<int> Variant { get; set; } = new List<int>();
         public List<int> LabWork { get; set; } = new List<int>();
 
@@ -147,8 +148,8 @@ namespace MyCash.ViewModel
             MyOrdersCollections = jsonOperations.DeserializingCollectionsObjects("MyOrders.json");
             MyColl = MyOrdersCollections = new ObservableCollection<MyOrders>(MyOrdersCollections.OrderBy(x => x.Status));
 
-            Lessons = jsonOperations.DeserializingCollectionsSubjects("Subjects.json");
-
+            Lessons = MediatorClass.Lessons = jsonOperations.DeserializingCollectionsSubjects("Subjects.json");
+            
             // установление кол-ва лаб и вариантов
             SetNumbers(LabWork, 15);
             SetNumbers(Variant, 25);
@@ -224,6 +225,9 @@ namespace MyCash.ViewModel
             OpenDialog = true;
         });
 
+
+        public ICommand ClosePopupToAdd => new RelayCommand(() => OpenDialog = false);
+
         public ICommand CreateOrChangeElement => new RelayCommand(() => AddOrEditElement());
 
         public void AddOrEditElement()
@@ -293,7 +297,7 @@ namespace MyCash.ViewModel
 
         private void SetNumbers(List<int> coll, int size)
         {
-            for (int i = 1; i <= size; i++)
+            for (int i = 0; i <= size; i++)
                 coll.Add(i);
         }
 
@@ -371,6 +375,12 @@ namespace MyCash.ViewModel
 
             GraphWindow graph = new GraphWindow();
             graph.ShowDialog();
+        });
+
+        public ICommand ShowSettings => new RelayCommand(() =>
+        {
+            var settings = new SettingWindow();
+            settings.ShowDialog();
         });
 
     }

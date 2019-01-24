@@ -3,11 +3,11 @@
 namespace MyCash.Windows
 {
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for SettingWindow.xaml
     /// </summary>
-    public partial class GraphWindow : Window
+    public partial class SettingWindow : Window
     {
-        public GraphWindow()
+        public SettingWindow()
         {
             InitializeComponent();
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Media;
 using LiveCharts;
 using LiveCharts.Wpf;
@@ -7,6 +8,11 @@ namespace MyCash
 {
     public class MediatorClass
     {
+        /// <summary>
+        /// Коллекция для содержания списка предметов
+        /// </summary>
+        public static ObservableCollection<string> Lessons { get; set; } = new ObservableCollection<string>();
+
         /// <summary>
         /// Подписи для столбчатой диаграммы
         /// </summary>
