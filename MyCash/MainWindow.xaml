@@ -64,7 +64,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="ФИО" VerticalAlignment="Bottom" Style="{StaticResource BaseBlock}" />
-                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding myOrders.FIO}" Style="{StaticResource BaseBox}" />
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding myOrders.FIO, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseBox}" />
 
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Предмет" Style="{StaticResource BaseBlock}" />
                     <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" ItemsSource="{Binding Lessons}" SelectedIndex="{Binding IndexSubject, Mode=TwoWay}" Style="{StaticResource BaseComboBox}" />
@@ -80,7 +80,7 @@
                               VerticalAlignment="Bottom" HorizontalAlignment="Left" />
 
                     <TextBlock Grid.Column="0" Grid.Row="5" Text="Стоимость" Style="{StaticResource BaseBlock}" />
-                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding myOrders.Cost}" Style="{StaticResource BaseBox}" />
+                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding myOrders.Cost, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseBox}" />
 
                     <TextBlock Grid.Column="0" Grid.Row="6" Text="Дата" Style="{StaticResource BaseBlock}" />
                     <!--<TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding Source={x:Static sys:DateTime.Today}, StringFormat='{}{0:d/M/yyyy}'}" Style="{StaticResource BaseBlock}" />-->
@@ -88,7 +88,7 @@
                                 FontSize="16" SelectedDateFormat="Short" />
 
                     <TextBlock Grid.Column="0" Grid.Row="7" Text="Описание" Style="{StaticResource BaseBlock}" />
-                    <TextBox Grid.Column="1" Grid.Row="7" Style="{StaticResource BaseBox}" Text="{Binding myOrders.Description}"/>
+                    <TextBox Grid.Column="1" Grid.Row="7" Style="{StaticResource BaseBox}" Text="{Binding myOrders.Description, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <StackPanel Grid.Column="1" Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Style="{StaticResource MaterialDesignFlatButton}" Foreground="White" Command="materialDesign:DialogHost.CloseDialogCommand">Отменить</Button>

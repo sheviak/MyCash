@@ -165,7 +165,7 @@ namespace MyCash.ViewModel
         {
             if (MyOrdersComplete == null)
             {
-                MyOrdersComplete = new ObservableCollection<MyOrders>();
+               // MyOrdersComplete = new ObservableCollection<MyOrders>();
                 MyColl = MyOrdersComplete = jsonOperations.DeserializingCollectionsObjects("MyOrdersComplete.json");
             } 
             else
@@ -194,7 +194,7 @@ namespace MyCash.ViewModel
         {
             if (SelectedItem != null)
             {
-                if (MyOrdersComplete.Count == 0)
+                if (MyOrdersComplete == null) //  || MyOrdersComplete.Count == 0
                     MyOrdersComplete = jsonOperations.DeserializingCollectionsObjects("MyOrdersComplete.json");
 
                 SelectedItem.Status = true;
@@ -224,7 +224,6 @@ namespace MyCash.ViewModel
             AddOrEdit = true;
             OpenDialog = true;
         });
-
 
         public ICommand ClosePopupToAdd => new RelayCommand(() => OpenDialog = false);
 
@@ -256,7 +255,7 @@ namespace MyCash.ViewModel
                     MyColl[t] = new MyOrders(
                         myOrders.FIO, Lessons[IndexSubject], LabWork[IndexLrSubject], Variant[IndexVariant],
                         myOrders.Cost, myOrders.Report, SelectedItem.Status, Date, myOrders.Description
-                     );
+                    );
                 } else MessageBox.Show("Заполните все поля!");
             }
 
@@ -365,7 +364,9 @@ namespace MyCash.ViewModel
                         DataLabels = true,
                         //процентное отображение на графике
                         LabelPoint = chartPoint => string.Format("{0} шт.\n({1:P})", chartPoint.Y, chartPoint.Participation),
-                        FontSize = 12
+                        FontSize = 12,
+                        PushOut = 8,
+                        Stroke = null
                     }
                 );
             }
