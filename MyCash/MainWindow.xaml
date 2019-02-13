@@ -22,7 +22,7 @@
     </Window.DataContext>
 
     <Window.InputBindings>
-        <KeyBinding Key="Esc" Modifiers="" Command="{Binding ClosePopupToAdd}" />
+        <KeyBinding Key="Esc" Modifiers="" Command="{Binding ClosePopup}" />
         <KeyBinding Key="Add" Modifiers="Ctrl" Command="{Binding OpenPopupToAdd}" />
         <KeyBinding Key="E" Modifiers="Ctrl" Command="{Binding CloseProgram}" />
         <KeyBinding Key="H" Modifiers="Ctrl" Command="{Binding MinimizedProgram}" />
@@ -64,35 +64,35 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="ФИО" VerticalAlignment="Bottom" Style="{StaticResource BaseBlock}" />
-                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding myOrders.FIO, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseBox}" />
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding myOrders.FIO, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseBox}" TabIndex="0" />
 
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Предмет" Style="{StaticResource BaseBlock}" />
-                    <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" ItemsSource="{Binding Lessons}" SelectedIndex="{Binding IndexSubject, Mode=TwoWay}" Style="{StaticResource BaseComboBox}" />
+                    <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" ItemsSource="{Binding Lessons}" SelectedIndex="{Binding IndexSubject, Mode=TwoWay}" Style="{StaticResource BaseComboBox}" TabIndex="1" />
 
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="Лаб. раб." Style="{StaticResource BaseBlock}" />
-                    <ComboBox Grid.Column="1" Grid.Row="2" IsEditable="True" ItemsSource="{Binding LabWork}" SelectedIndex="{Binding IndexLrSubject}" Style="{StaticResource BaseComboBox}" />
+                    <ComboBox Grid.Column="1" Grid.Row="2" IsEditable="True" ItemsSource="{Binding LabWork}" SelectedIndex="{Binding IndexLrSubject}" Style="{StaticResource BaseComboBox}" TabIndex="2"  />
 
                     <TextBlock Grid.Column="0" Grid.Row="3" Text="Вариант" Style="{StaticResource BaseBlock}" />
-                    <ComboBox Grid.Column="1" Grid.Row="3" IsEditable="True" ItemsSource="{Binding Variant}" SelectedIndex="{Binding IndexVariant}" Style="{StaticResource BaseComboBox}" />
+                    <ComboBox Grid.Column="1" Grid.Row="3" IsEditable="True" ItemsSource="{Binding Variant}" SelectedIndex="{Binding IndexVariant}" Style="{StaticResource BaseComboBox}" TabIndex="3"  />
 
                     <TextBlock Grid.Column="0" Grid.Row="4" Text="Отчёт" Style="{StaticResource BaseBlock}" />
                     <ToggleButton Grid.Column="1" Grid.Row="4" IsChecked="{Binding myOrders.Report}" Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                              VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+                              VerticalAlignment="Bottom" HorizontalAlignment="Left" TabIndex="4"  />
 
                     <TextBlock Grid.Column="0" Grid.Row="5" Text="Стоимость" Style="{StaticResource BaseBlock}" />
-                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding myOrders.Cost, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseBox}" />
+                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding myOrders.Cost, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseBox}" TabIndex="5"  />
 
                     <TextBlock Grid.Column="0" Grid.Row="6" Text="Дата" Style="{StaticResource BaseBlock}" />
                     <!--<TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding Source={x:Static sys:DateTime.Today}, StringFormat='{}{0:d/M/yyyy}'}" Style="{StaticResource BaseBlock}" />-->
                     <DatePicker Grid.Column="1" Grid.Row="6" SelectedDate="{Binding Date}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
-                                FontSize="16" SelectedDateFormat="Short" />
+                                FontSize="16" SelectedDateFormat="Short" TabIndex="6"  />
 
                     <TextBlock Grid.Column="0" Grid.Row="7" Text="Описание" Style="{StaticResource BaseBlock}" />
-                    <TextBox Grid.Column="1" Grid.Row="7" Style="{StaticResource BaseBox}" Text="{Binding myOrders.Description, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Grid.Column="1" Grid.Row="7" Style="{StaticResource BaseBox}" Text="{Binding myOrders.Description, UpdateSourceTrigger=PropertyChanged}" TabIndex="7" />
 
                     <StackPanel Grid.Column="1" Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Style="{StaticResource MaterialDesignFlatButton}" Foreground="White" Command="materialDesign:DialogHost.CloseDialogCommand">Отменить</Button>
-                        <Button Style="{StaticResource MaterialDesignFlatButton}" Foreground="White" Command="{Binding CreateOrChangeElement}" Content="{Binding BtnText}" Margin="10 0 0 0" />
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" Foreground="White" Command="{Binding ClosePopup}" TabIndex="8">Отменить</Button>
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" Foreground="White" Command="{Binding CreateOrChangeElement}" Content="{Binding BtnText}" Margin="10 0 0 0" TabIndex="9" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -228,6 +228,9 @@
                     <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="10 0 0 0" Command="{Binding OpenPopupToAdd}">Добавить</Button>
                 </StackPanel>
             </Grid>
+            <materialDesign:Snackbar Grid.Row="2" IsActive="{Binding IsActive}">
+                <materialDesign:SnackbarMessage Content="{Binding IsActiveContent}" />
+            </materialDesign:Snackbar>
         </Grid>
     </materialDesign:DialogHost>
 </Window>

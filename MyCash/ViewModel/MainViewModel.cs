@@ -9,6 +9,8 @@ using System.Windows.Input;
 using LiveCharts;
 using LiveCharts.Wpf;
 using MyCash.Windows;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace MyCash.ViewModel
 {
@@ -34,7 +36,9 @@ namespace MyCash.ViewModel
             }
         }
 
-        // открытие и закрытие окна popup (добавления и редактирвоания)
+        /// <summary>
+        /// Свойство отвечающие за открытие и закрытие окна popup (добавления и редактирвоания)
+        /// </summary>
         private bool _OpenDialog;
         public bool OpenDialog
         {
@@ -42,6 +46,34 @@ namespace MyCash.ViewModel
             set
             {
                 _OpenDialog = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Свойство отвечающие за отображение и скрытие Snackbar с уведомлением о действии
+        /// </summary>
+        private bool _IsActive;
+        public bool IsActive
+        {
+            get => _IsActive;
+            set
+            {
+                _IsActive = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Свойство отвечающие за контент в Snackbar
+        /// </summary>
+        private string _IsActiveContent;
+        public string IsActiveContent
+        {
+            get => _IsActiveContent;
+            set
+            {
+                _IsActiveContent = value;
                 OnPropertyChanged();
             }
         }
@@ -215,6 +247,7 @@ namespace MyCash.ViewModel
                     Changes = true;
                 else
                     ChangesComplete = true;
+                ChangeSnackBar("Запись удалена!");
             }
         });
 
@@ -225,7 +258,11 @@ namespace MyCash.ViewModel
             OpenDialog = true;
         });
 
-        public ICommand ClosePopupToAdd => new RelayCommand(() => OpenDialog = false);
+        public ICommand ClosePopup => new RelayCommand(() =>
+        {
+            OpenDialog = false;
+            ResetProperty();
+        });
 
         public ICommand CreateOrChangeElement => new RelayCommand(() => AddOrEditElement());
 
@@ -239,6 +276,7 @@ namespace MyCash.ViewModel
                         myOrders.FIO, Lessons[IndexSubject], LabWork[IndexLrSubject], Variant[IndexVariant],
                         myOrders.Cost, myOrders.Report, false, Date, myOrders.Description
                      ));
+                    ChangeSnackBar("Запись добавлена!");
                     RefreshMyOrdersCollections();
                 }
                 else
@@ -256,6 +294,7 @@ namespace MyCash.ViewModel
                         myOrders.FIO, Lessons[IndexSubject], LabWork[IndexLrSubject], Variant[IndexVariant],
                         myOrders.Cost, myOrders.Report, SelectedItem.Status, Date, myOrders.Description
                     );
+                    ChangeSnackBar("Запись изменена!");
                 } else MessageBox.Show("Заполните все поля!");
             }
 
@@ -265,7 +304,8 @@ namespace MyCash.ViewModel
             ResetProperty();
         }
 
-        public ICommand Edit => new RelayCommand(() => {
+        public ICommand Edit => new RelayCommand(() => 
+        {
             if (SelectedItem != null)
             {
                 myOrders.FIO = SelectedItem.FIO;
@@ -284,6 +324,18 @@ namespace MyCash.ViewModel
         });
 
         public ICommand Refresh => new RelayCommand(() => RefreshMyOrdersCollections());
+
+        // метод скрывающий через время Snackbar с уведомлением
+        async private void ChangeSnackBar(string content)
+        {
+            await Task.Run(() => {
+                IsActiveContent = content;
+                IsActive = true;
+                Thread.Sleep(2500);
+                IsActive = false;
+                IsActiveContent = null;
+            });
+        }
 
         private void RefreshMyOrdersCollections()
         {
@@ -324,7 +376,6 @@ namespace MyCash.ViewModel
             myOrders.Description = null;
             Date = DateTime.Now;
         }
-
 
         public ICommand ShowGraphics => new RelayCommand(() =>
         {
