@@ -35,7 +35,7 @@
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>
                 <Storyboard>
-                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.7" FillBehavior="HoldEnd" />
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" FillBehavior="HoldEnd" />
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
@@ -224,12 +224,11 @@
                             </Style>
                         </StackPanel.Style>
                     </StackPanel>
-                    
                     <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="10 0 0 0" Command="{Binding OpenPopupToAdd}">Добавить</Button>
                 </StackPanel>
             </Grid>
-            <materialDesign:Snackbar Grid.Row="2" IsActive="{Binding IsActive}">
-                <materialDesign:SnackbarMessage Content="{Binding IsActiveContent}" />
+            <materialDesign:Snackbar Grid.Row="2" IsActive="{Binding IsActive}" Width="320" Background="White">
+                <materialDesign:SnackbarMessage Content="{Binding IsActiveContent}" Foreground="Black"/>
             </materialDesign:Snackbar>
         </Grid>
     </materialDesign:DialogHost>

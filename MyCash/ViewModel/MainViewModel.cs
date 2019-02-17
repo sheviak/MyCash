@@ -281,7 +281,7 @@ namespace MyCash.ViewModel
                 }
                 else
                 {
-                    MessageBox.Show("Заполните все поля!");
+                    ChangeSnackBar("Заполните все поля!");
                     return;
                 }
             }
@@ -295,7 +295,7 @@ namespace MyCash.ViewModel
                         myOrders.Cost, myOrders.Report, SelectedItem.Status, Date, myOrders.Description
                     );
                     ChangeSnackBar("Запись изменена!");
-                } else MessageBox.Show("Заполните все поля!");
+                } else ChangeSnackBar("Заполните все поля!");
             }
 
             OpenDialog = false;
