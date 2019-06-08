@@ -12,7 +12,7 @@
         xmlns:viewmodel="clr-namespace:MyCash.ViewModel"
         WindowStartupLocation="CenterScreen"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Height="450" Width="400">
+        Height="450" Width="400" Title="Settings">
 
     <Window.DataContext>
         <viewmodel:SettingViewModel />
@@ -38,7 +38,8 @@
             <materialDesign:PackIcon Kind="WindowClose" Height="25" Width="25" Foreground="LightSlateGray" />
         </Button>
 
-        <ListBox Grid.Row="1" Margin="0" FontSize="14" Padding="10 0" ItemsSource="{Binding Lessons}" SelectedItem="{Binding SelectedLesson}" />
+        <ListBox Grid.Row="1" Margin="0" FontSize="14" Padding="10 0" VirtualizingPanel.ScrollUnit="Pixel"
+                 ItemsSource="{Binding Lessons}" SelectedItem="{Binding SelectedLesson}" />
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="8 0 8 0" FocusManager.FocusedElement="{Binding ElementName=txtLesson}">
             <TextBox FontSize="14" Foreground="White" Width="180" VerticalAlignment="Center" Margin="8 0 8 0"
